@@ -47,15 +47,19 @@ class Neuron:
             for j in range(epocs):
                 
                 for k in range(self.param_num):
+                    # Applying the gradient descent
+                    
                     expected_output = self.activation()
                     
-                    error = (expected_output - self.inputs[k]) ** 2
-                    output = expected_output
+                    # cost = 0.5 * (expected_output - self.inputs[k]) ** 2
                     
-                    adjustment = lr * output * (1 - output)
-                    
-                    self.weights[k] -= adjustment
-                    self.bias -= lr * adjustment
+                    # l = ∂z/∂w
+                    adjustment = lr * expected_output * (1 - expected_output) * (expected_output - self.inputs[k]) *  (self.asked_inputs[k])
+                    # if cost < .1:
+                    #     self.weights[k] += adjustment
+                    #     self.bias += lr * adjustment
+                    self.weights[k] += adjustment
+                    self.bias += lr * adjustment
         self.trained = True
                     
     def activation(self) -> float:
