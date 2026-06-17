@@ -13,7 +13,8 @@ class Neuron:
         This is the constructor of the class it would define the weights, biases and
         would also flatten the input multidimensional array using numpy
         '''
-    
+        self.trained = False # To check whether the training is completed or not
+        self.asked_inputs = np.array(inputs).flatten()
         self.inputs = np.array(inputs).flatten() # flattening the array
         self.param_num = len(self.inputs)   # calculating the total number of parameters
         self.weights = np.zeros(self.param_num) # initializing the initial weights
@@ -55,6 +56,7 @@ class Neuron:
                     
                     self.weights[k] -= adjustment
                     self.bias -= lr * adjustment
+        self.trained = True
                     
     def activation(self) -> float:
         '''
