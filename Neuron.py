@@ -96,3 +96,9 @@ int_list = [
     [1,1,1,1],
     [0,0,0,1]
 ]
+
+N = Neuron(int_list)
+print(N.activation())
+N.train(training_data)
+print('weights: ',N.weights, '\nbias: ', N.bias)
+print(N.activation())
