@@ -32,4 +32,28 @@ class Neuron:
         
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
+    
+    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 10):
+        '''
+        This is the method to train the sigmoid neuron.
+        It is taking an array of training data, which would have 4X4 pixel or 4x4 matrix that would contain 
+        0s or 1s to depict or make an approximate 4.
+        '''
         
+        for i in traning_input:
+            self.inputs = np.array(i).flatten()
+            
+            for j in range(epocs):
+                
+                for k in range(self.param_num):
+                    expected_output = self.activation()
+                    
+                    error = (expected_output - self.inputs[k]) ** 2
+                    output = expected_output
+                    
+                    adjustment = lr * output * (1 - output)
+                    
+                    self.weights[k] -= adjustment
+                    self.bias -= lr * adjustment
+                    
+    
