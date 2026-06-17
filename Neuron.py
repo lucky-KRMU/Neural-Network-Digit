@@ -41,7 +41,7 @@ class Neuron:
         0s or 1s to depict or make an approximate 4.
         '''
         
-        for i, o in traning_input:
+        for i, o in traning_input: # o is the label
             self.inputs = np.array(i).flatten()
             
             for j in range(epocs):
@@ -60,8 +60,10 @@ class Neuron:
                 # if cost < .1:
                 #     self.weights[k] += adjustment
                 #     self.bias += lr * adjustment
+                sign = np.sign((prediction-o))
+                adjustment *= sign # updating the sign 
                 self.weights[j] += adjustment
-                self.bias += lr * adjustment
+                self.bias += adjustment
         self.trained = True
                     
     def activation(self) -> float:
