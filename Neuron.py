@@ -56,4 +56,16 @@ class Neuron:
                     self.weights[k] -= adjustment
                     self.bias -= lr * adjustment
                     
-    
+    def activation(self) -> float:
+        '''
+        This is the function to make calculate and give the output of final activation.
+        '''
+        
+        if self.trained:
+            self.inputs = self.asked_inputs
+        
+        
+        
+        self.weighted_sum_func()
+        self.z = 1/(1 + math.exp((-self.weighted_sum)))
+        return self.z
