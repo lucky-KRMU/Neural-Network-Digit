@@ -41,25 +41,23 @@ class Neuron:
         0s or 1s to depict or make an approximate 4.
         '''
         
-        for i in traning_input:
+        for i, o in traning_input:
             self.inputs = np.array(i).flatten()
             
             for j in range(epocs):
+                # Applying the gradient descent
                 
-                for k in range(self.param_num):
-                    # Applying the gradient descent
-                    
-                    expected_output = self.activation()
-                    
-                    # cost = 0.5 * (expected_output - self.inputs[k]) ** 2
-                    
-                    # l = ∂z/∂w
-                    adjustment = lr * expected_output * (1 - expected_output) * (expected_output - self.inputs[k]) *  (self.asked_inputs[k])
-                    # if cost < .1:
-                    #     self.weights[k] += adjustment
-                    #     self.bias += lr * adjustment
-                    self.weights[k] += adjustment
-                    self.bias += lr * adjustment
+                prediction = self.activation()
+                
+                # cost = 0.5 * (expected_output - self.inputs[k]) ** 2
+                
+                # l = ∂z/∂w
+                adjustment = lr * prediction * (1 - prediction) * (prediction - self.inputs[j]) *  (self.asked_inputs[j])
+                # if cost < .1:
+                #     self.weights[k] += adjustment
+                #     self.bias += lr * adjustment
+                self.weights[j] += adjustment
+                self.bias += lr * adjustment
         self.trained = True
                     
     def activation(self) -> float:
@@ -77,24 +75,25 @@ class Neuron:
         return self.z
 
 training_data=[
-    [
+    # Changed the training data format to tuple to tell the neuron whether it's a 4 or not
+    ([
         [1,0,0,1],
         [1,0,0,1],
         [1,1,1,1],
         [0,0,0,1]
-    ],
-    [
+    ], 1),
+    ([
         [0,0,0,1],
         [0,0,1,1],
         [1,1,1,1],
         [0,0,0,1]
-    ],
-    [
+    ], 1),
+    ([
         [0,0,1,1],
         [0,1,1,1],
         [1,1,1,1],
         [0,0,0,1]
-    ]
+    ], 1)
 ]
 int_list = [
     [1,0,0,1],
