@@ -34,7 +34,7 @@ class Neuron:
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
     
-    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 10):
+    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 20):
         '''
         This is the method to train the sigmoid neuron.
         It is taking an array of training data, which would have 4X4 pixel or 4x4 matrix that would contain 
@@ -56,14 +56,20 @@ class Neuron:
                 # The above statement is mathematically saying that i am trying to compare or find out the cost by 
                 # comparing prediction of the entire image with just one pixel.
                 
-                adjustment = lr * prediction * (1 - prediction) * (prediction - o) *  (self.inputs[j])
-                # if cost < .1:
-                #     self.weights[k] += adjustment
-                #     self.bias += lr * adjustment
-                sign = np.sign((prediction-o))
-                adjustment *= sign # updating the sign 
-                self.weights[j] += adjustment
-                self.bias += adjustment
+                for k in range(self.param_num):
+                    adjustment = lr * prediction * (1 - prediction) * (prediction - o) *  (self.inputs[k])
+                    
+                    # if o == 0 and np.sign((prediction-o)) in (1,0):
+                    #     self.weights[k] -= adjustment
+                    # else:
+                    #     self.weights[k] += adjustment
+                    
+                    # if o == 1 and np.sign((prediction - o)) in (-1,0):
+                    #     self.weights[k] += adjustment
+                    # else:
+                    self.weights[k] += adjustment
+                        
+                self.bias += lr * prediction * (1 - prediction) * (prediction - o)
         self.trained = True
                     
     def activation(self) -> float:
@@ -174,15 +180,29 @@ training_data = [
         [1,0,0,1],
         [1,1,1,1],
         [0,0,0,1]
-    ], 0)
+    ], 0),
+    
+    ([
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+    ], 0),
+    
 ]
 
 int_list = [
     [1,0,0,1],
-    [1,0,0,1],
     [1,1,1,1],
+    [0,0,0,1],
     [0,0,0,1]
 ]
+# int_list = [
+#     [0,0,0,0],
+#     [0,0,0,0],
+#     [0,0,0,0],
+#     [0,0,0,0]
+# ]
 
 N = Neuron(int_list)
 print(N.activation())
