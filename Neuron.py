@@ -52,7 +52,11 @@ class Neuron:
                 # cost = 0.5 * (expected_output - self.inputs[k]) ** 2
                 
                 # l = ∂z/∂w
-                adjustment = lr * prediction * (1 - prediction) * (prediction - self.inputs[j]) *  (self.asked_inputs[j])
+                # adjustment = lr * prediction * (1 - prediction) * (prediction - self.inputs[j]) *  (self.asked_inputs[j])
+                # The above statement is mathematically saying that i am trying to compare or find out the cost by 
+                # comparing prediction of the entire image with just one pixel.
+                
+                adjustment = lr * prediction * (1 - prediction) * (prediction - o) *  (self.inputs[j])
                 # if cost < .1:
                 #     self.weights[k] += adjustment
                 #     self.bias += lr * adjustment
