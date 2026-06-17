@@ -19,3 +19,17 @@ class Neuron:
         self.weights = np.zeros(self.param_num) # initializing the initial weights
         self.bias = 0 # initializing the bias initially
         
+    def weighted_sum_func(self) -> float:
+        '''
+        This is the method to claculate the weighted sum
+        -> this is not the activation
+        '''
+        
+        sum = 0
+        self.weighted_sum = 0
+        for x,y in zip(self.weights, self.inputs):
+            sum += x * y
+        
+        self.weighted_sum = sum + self.bias
+        return self.weighted_sum
+        
