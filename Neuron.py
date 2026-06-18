@@ -36,17 +36,18 @@ class Neuron:
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
     
-    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 1):
+    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 10):
         '''
         This is the method to train the sigmoid neuron.
         It is taking an array of training data, which would have 4X4 pixel or 4x4 matrix that would contain 
         0s or 1s to depict or make an approximate 4.
         '''
         
-        for i, o in traning_input: # o is the label
-            self.inputs = np.array(i).flatten()
+        for j in range(epocs):
             
-            for j in range(epocs):
+            for i, o in traning_input: # o is the label
+                self.inputs = np.array(i).flatten()
+            
             
                 # Applying the gradient descent
                 
@@ -200,12 +201,12 @@ int_list = [
     [0,0,0,1],
     [0,0,0,1]
 ]
-# int_list = [
-#     [0,0,1,1],
-#     [0,1,1,1],
-#     [1,1,1,1],
-#     [0,0,0,1]
-# ]
+int_list = [
+    [0,0,0,1],
+    [0,0,1,1],
+    [0,1,1,1],
+    [0,0,0,1]
+]
 # int_list = [
 #  [1,1,1,1],
 #  [1,1,1,1],
@@ -219,8 +220,9 @@ int_list = [
 #  [0,0,0,0]
 # ]
 
+
 N = Neuron(int_list)
 print(N.activation())
 N.train(training_data)
-print('weights: ',N.weights, '\nbias: ', N.bias)
+print('weights: \n', N.weights.reshape(4,4), '\nbias: ', N.bias)
 print(N.activation())
