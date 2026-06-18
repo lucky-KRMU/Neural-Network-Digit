@@ -10,28 +10,30 @@ class Neuron:
     
     
     
-    def __init__(self, inputs: list):
+    def __init__(self, inputs: int):
         '''
         This is the constructor of the class it would define the weights, biases and
         would also flatten the input multidimensional array using numpy
         '''
-        self.trained = False # To check whether the training is completed or not
-        self.asked_inputs = np.array(inputs).flatten()
-        self.inputs = np.array(inputs).flatten() # flattening the array
-        self.param_num = len(self.inputs)   # calculating the total number of parameters
-        self.weights = np.random.randn(self.param_num) # initializing the initial weights
+        # self.trained = False # To check whether the training is completed or not
+        # self.asked_inputs = np.array(inputs).flatten()
+    
+        self.weights = np.random.randn(inputs)  # initializing the initial weights
+        
         self.bias = 0 # initializing the bias initially
         
-    def weighted_sum_func(self) -> float:
+    def weighted_sum_func(self, x: list) -> float:
         '''
         This is the method to claculate the weighted sum
         -> this is not the activation
         '''
         
-        sum = 0
+    
         self.weighted_sum = 0
-        for x,y in zip(self.weights, self.inputs):
-            sum += x * y
+        # for x,y in zip(self.weights, self.inputs):
+        #     sum += x * y
+        x = np.array(x).flatten()
+        sum = np.dot(self.weights, x) # shorthand dot product of numpy
         
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
@@ -51,7 +53,7 @@ class Neuron:
             
                 # Applying the gradient descent
                 
-                prediction = self.activation()
+                prediction = self.activation(self.inputs)
                 
                 cost_sum = 0
                 # l = ∂z/∂w
@@ -61,32 +63,35 @@ class Neuron:
                 
                 cost = 0.5 * (prediction - o) ** 2
                 cost_sum += cost
-                for k in range(self.param_num):
-                    # Applying Backpropagation
-                    gradient = prediction * (1 - prediction) * (prediction - o) * (self.inputs[k])
+                # for k in range(self.param_num):
+                #     # Applying Backpropagation
+                #     gradient = prediction * (1 - prediction) * (prediction - o) * (self.inputs[k])
                     
                     
                     
-                    # applying gradient descent
-                    self.weights[k] -= lr * gradient
+                #     # applying gradient descent
+                #     self.weights[k] -= lr * gradient
                         
-                self.bias -= lr * prediction * (1 - prediction) * (prediction - o)
+                # self.bias -= lr * prediction * (1 - prediction) * (prediction - o)
+                gradient = (prediction * (1 - prediction) * (prediction - o))
+                self.weights = lr * gradient * self.inputs
+                self.bias = lr * gradient
             print("gradients: ", gradient)
             print("pre: ",prediction)
             print(f'cost: {cost_sum/epocs}\n')
         self.trained = True
                     
-    def activation(self) -> float:
+    def activation(self, x:list) -> float:
         '''
         This is the function to make calculate and give the output of final activation.
         '''
         
-        if self.trained:
-            self.inputs = self.asked_inputs
+        # if self.trained:
+        #     self.inputs = self.asked_inputs
         
         
         
-        self.weighted_sum_func()
+        self.weighted_sum_func(x)
         self.z = 1/(1 + math.exp((-self.weighted_sum)))
         return self.z
 
@@ -197,16 +202,16 @@ training_data = [
 
 int_list = [
     [1,0,0,1],
+    [1,0,0,1],
     [1,1,1,1],
-    [0,0,0,1],
     [0,0,0,1]
 ]
-int_list = [
-    [0,0,0,1],
-    [0,0,1,1],
-    [0,1,1,1],
-    [0,0,0,1]
-]
+# int_list = [
+#     [0,0,0,1],
+#     [0,0,1,1],
+#     [0,1,1,1],
+#     [0,0,0,1]
+# ]
 # int_list = [
 #  [1,1,1,1],
 #  [1,1,1,1],
@@ -221,8 +226,8 @@ int_list = [
 # ]
 
 
-N = Neuron(int_list)
-print(N.activation())
+N = Neuron(16)
+print(N.activation(int_list))
 N.train(training_data)
 print('weights: \n', N.weights.reshape(4,4), '\nbias: ', N.bias)
-print(N.activation())
+print(N.activation(int_list))
