@@ -18,7 +18,7 @@ class Neuron:
         # self.trained = False # To check whether the training is completed or not
         # self.asked_inputs = np.array(inputs).flatten()
     
-        self.weights = np.random.randn(inputs)  # initializing the initial weights
+        self.weights = np.random.randn(inputs)   # initializing the initial weights
         
         self.bias = 0 # initializing the bias initially
         
@@ -38,14 +38,14 @@ class Neuron:
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
     
-    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 10):
+    def train(self, traning_input: list, lr: float = 0.01, epochs: int = 10):
         '''
         This is the method to train the sigmoid neuron.
         It is taking an array of training data, which would have 4X4 pixel or 4x4 matrix that would contain 
         0s or 1s to depict or make an approximate 4.
         '''
         
-        for j in range(epocs):
+        for j in range(epochs):
             
             for i, o in traning_input: # o is the label
                 self.inputs = np.array(i).flatten()
@@ -61,8 +61,8 @@ class Neuron:
                 # The above statement is mathematically saying that i am trying to compare or find out the cost by 
                 # comparing prediction of the entire image with just one pixel.
                 
-                cost = 0.5 * (prediction - o) ** 2
-                cost_sum += cost
+                # cost = 0.5 * (prediction - o) ** 2
+                # cost_sum += cost
                 # for k in range(self.param_num):
                 #     # Applying Backpropagation
                 #     gradient = prediction * (1 - prediction) * (prediction - o) * (self.inputs[k])
@@ -74,11 +74,11 @@ class Neuron:
                         
                 # self.bias -= lr * prediction * (1 - prediction) * (prediction - o)
                 gradient = (prediction * (1 - prediction) * (prediction - o))
-                self.weights = lr * gradient * self.inputs
-                self.bias = lr * gradient
-            print("gradients: ", gradient)
-            print("pre: ",prediction)
-            print(f'cost: {cost_sum/epocs}\n')
+                self.weights -= lr * gradient * self.inputs
+                self.bias -= lr * gradient
+            # print("gradients: ", gradient)
+            # print("pre: ",prediction)
+            # print(f'cost: {cost_sum/epochs}\n')
         self.trained = True
                     
     def activation(self, x:list) -> float:
@@ -200,12 +200,81 @@ training_data = [
     
 ]
 
+training_data_balanced = [
+    # Changed the training data format to tuple to tell the neuron whether it's a 4 or not
+    # 4s (label = 1)
+    ([
+        [1,0,0,1],
+        [1,0,0,1],
+        [1,1,1,1],
+        [0,0,0,1]
+    ], 1),
+
+    ([
+        [0,0,0,1],
+        [0,0,1,1],
+        [1,1,1,1],
+        [0,0,0,1]
+    ], 1),
+
+    ([
+        [0,0,1,1],
+        [0,1,1,1],
+        [1,1,1,1],
+        [0,0,0,1]
+    ], 1),
+    
+    ([
+    [0,1,0,1],
+    [0,1,1,1],
+    [0,0,0,1],
+    [0,0,0,1]
+    ], 1),
+
+    # 8s (label = 0)
+    ([
+        [1,1,1,1],
+        [1,0,0,1],
+        [1,1,1,1],
+        [1,0,0,1]
+    ], 0),
+
+    ([
+        [1,1,1,1],
+        [1,0,0,1],
+        [1,0,0,1],
+        [1,0,0,1]
+    ], 0),
+    
+    # 9s (label = 0)
+    ([
+        [1,1,1,1],
+        [1,0,0,1],
+        [1,1,1,1],
+        [0,0,0,1]
+    ], 0),
+    
+    ([
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+    ], 0),
+    
+]
+
 int_list = [
     [1,0,0,1],
-    [1,0,0,1],
     [1,1,1,1],
+    [0,0,0,1],
     [0,0,0,1]
 ]
+# int_list = [
+#     [0,1,0,1],
+#     [0,1,1,1],
+#     [0,0,0,1],
+#     [0,0,0,1]
+# ]
 # int_list = [
 #     [0,0,0,1],
 #     [0,0,1,1],
@@ -228,6 +297,6 @@ int_list = [
 
 N = Neuron(16)
 print(N.activation(int_list))
-N.train(training_data)
+N.train(training_data, epochs=1000)
 print('weights: \n', N.weights.reshape(4,4), '\nbias: ', N.bias)
 print(N.activation(int_list))
