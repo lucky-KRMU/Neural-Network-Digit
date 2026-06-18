@@ -47,6 +47,7 @@ class Neuron:
             self.inputs = np.array(i).flatten()
             
             for j in range(epocs):
+            
                 # Applying the gradient descent
                 
                 prediction = self.activation()
@@ -69,6 +70,7 @@ class Neuron:
                     self.weights[k] -= lr * gradient
                         
                 self.bias -= lr * prediction * (1 - prediction) * (prediction - o)
+            print("gradients: ", gradient)
             print("pre: ",prediction)
             print(f'cost: {cost_sum/epocs}\n')
         self.trained = True
@@ -203,6 +205,18 @@ int_list = [
 #     [0,1,1,1],
 #     [1,1,1,1],
 #     [0,0,0,1]
+# ]
+# int_list = [
+#  [1,1,1,1],
+#  [1,1,1,1],
+#  [1,1,1,1],
+#  [1,1,1,1]
+# ]
+# int_list = [
+#  [0,0,0,0],
+#  [0,0,0,0],
+#  [0,0,0,0],
+#  [0,0,0,0]
 # ]
 
 N = Neuron(int_list)
