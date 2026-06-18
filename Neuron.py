@@ -17,7 +17,7 @@ class Neuron:
         self.asked_inputs = np.array(inputs).flatten()
         self.inputs = np.array(inputs).flatten() # flattening the array
         self.param_num = len(self.inputs)   # calculating the total number of parameters
-        self.weights = np.zeros(self.param_num) # initializing the initial weights
+        self.weights = np.random.randn(self.param_num) # initializing the initial weights
         self.bias = 0 # initializing the bias initially
         
     def weighted_sum_func(self) -> float:
@@ -34,7 +34,7 @@ class Neuron:
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
     
-    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 20):
+    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 10):
         '''
         This is the method to train the sigmoid neuron.
         It is taking an array of training data, which would have 4X4 pixel or 4x4 matrix that would contain 
@@ -49,27 +49,26 @@ class Neuron:
                 
                 prediction = self.activation()
                 
-                # cost = 0.5 * (expected_output - self.inputs[k]) ** 2
-                
+                cost_sum = 0
                 # l = ∂z/∂w
                 # adjustment = lr * prediction * (1 - prediction) * (prediction - self.inputs[j]) *  (self.asked_inputs[j])
                 # The above statement is mathematically saying that i am trying to compare or find out the cost by 
                 # comparing prediction of the entire image with just one pixel.
                 
                 for k in range(self.param_num):
-                    adjustment = lr * prediction * (1 - prediction) * (prediction - o) *  (self.inputs[k])
+                    # Applying Backpropagation
+                    gradient = prediction * (1 - prediction) * (prediction - o) * (self.inputs[k])
                     
-                    # if o == 0 and np.sign((prediction-o)) in (1,0):
-                    #     self.weights[k] -= adjustment
-                    # else:
-                    #     self.weights[k] += adjustment
+                    cost = 0.5 * (prediction - self.inputs[k]) ** 2
+                    cost_sum += cost
                     
-                    # if o == 1 and np.sign((prediction - o)) in (-1,0):
-                    #     self.weights[k] += adjustment
-                    # else:
-                    self.weights[k] += adjustment
+                    
+                    # applying gradient descent
+                    self.weights[k] -= lr * gradient
                         
                 self.bias += lr * prediction * (1 - prediction) * (prediction - o)
+            print("pre: ",prediction)
+            print(f'cost: {cost_sum/epocs}\n')
         self.trained = True
                     
     def activation(self) -> float:
