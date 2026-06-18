@@ -1,6 +1,8 @@
 import math
 import numpy as np
 
+np.random.seed(42)
+
 class Neuron:
     '''
     This is a Sigmoid neuron class
@@ -34,7 +36,7 @@ class Neuron:
         self.weighted_sum = sum + self.bias
         return self.weighted_sum
     
-    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 10):
+    def train(self, traning_input: list, lr: float = 0.01, epocs: int = 1):
         '''
         This is the method to train the sigmoid neuron.
         It is taking an array of training data, which would have 4X4 pixel or 4x4 matrix that would contain 
@@ -66,7 +68,7 @@ class Neuron:
                     # applying gradient descent
                     self.weights[k] -= lr * gradient
                         
-                self.bias += lr * prediction * (1 - prediction) * (prediction - o)
+                self.bias -= lr * prediction * (1 - prediction) * (prediction - o)
             print("pre: ",prediction)
             print(f'cost: {cost_sum/epocs}\n')
         self.trained = True
@@ -197,10 +199,10 @@ int_list = [
     [0,0,0,1]
 ]
 # int_list = [
-#     [0,0,0,0],
-#     [0,0,0,0],
-#     [0,0,0,0],
-#     [0,0,0,0]
+#     [0,0,1,1],
+#     [0,1,1,1],
+#     [1,1,1,1],
+#     [0,0,0,1]
 # ]
 
 N = Neuron(int_list)
