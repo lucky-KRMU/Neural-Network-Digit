@@ -55,12 +55,12 @@ class Neuron:
                 # The above statement is mathematically saying that i am trying to compare or find out the cost by 
                 # comparing prediction of the entire image with just one pixel.
                 
+                cost = 0.5 * (prediction - o) ** 2
+                cost_sum += cost
                 for k in range(self.param_num):
                     # Applying Backpropagation
                     gradient = prediction * (1 - prediction) * (prediction - o) * (self.inputs[k])
                     
-                    cost = 0.5 * (prediction - self.inputs[k]) ** 2
-                    cost_sum += cost
                     
                     
                     # applying gradient descent
